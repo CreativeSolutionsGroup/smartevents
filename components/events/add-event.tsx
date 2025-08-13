@@ -6,6 +6,13 @@ import { useState } from "react";
 import { Input } from "../ui/input";
 import { DateTimePicker } from "../ui/datetime-picker";
 import { createEvent } from "@/lib/server/event";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 
 export default function AddEvent() {
   const [showInput, setShowInput] = useState(false);
@@ -26,57 +33,72 @@ export default function AddEvent() {
         type="text"
         placeholder="Event name"
         className={`transition-all duration-200 ease-in-out ${
-          showInput ? "opacity-100" : "opacity-0"
+          showInput ? "opacity-100" : "opacity-0!"
         }`}
         value={eventName}
         onChange={(e) => setEventName(e.target.value)}
+        disabled={!showInput}
       />
-      <DateTimePicker
-        placeholder="Start Date"
-        value={startDate}
-        onChange={setStartDate}
-        className={`transition-all duration-200 ease-in-out ${
-          showInput ? "opacity-100" : "opacity-0"
-        }`}
-        required
-      />
-      <DateTimePicker
-        placeholder="End Date"
-        value={endDate}
-        onChange={setEndDate}
-        className={`transition-all duration-200 ease-in-out ${
-          showInput ? "opacity-100" : "opacity-0"
-        }`}
-        required
-      />
-      <Button
-        variant="ghost"
-        className={`cursor-pointer transition-all duration-200 ease-in-out ${
-          showInput ? "opacity-100" : "opacity-0"
-        }`}
-        onClick={() => {
-          setShowInput(false);
-          if (eventName && startDate && endDate) {
-            createEvent(eventName, startDate ?? new Date(), endDate ?? new Date());
-          }
-        }}
-      >
-        <CheckCircle className="text-accent" />
-      </Button>
-      <Button
-        variant="ghost"
-        className={`cursor-pointer transition-all duration-200 ease-in-out ${
-          showInput ? "opacity-100" : "opacity-0"
-        }`}
-        onClick={() => {
-          setShowInput(false);
-          setEventName("");
-          setStartDate(undefined);
-          setEndDate(undefined);
-        }}
-      >
-        <CircleX className="text-accent" />
-      </Button>
+      <div className="flex gap-2 justify-end">
+        <Dialog
+          onOpenChange={(open) => {
+            if (!open) {
+              setEventName("");
+              setStartDate(undefined);
+              setEndDate(undefined);
+              setShowInput(false);
+            }
+          }}
+        >
+          <DialogTrigger asChild disabled={!showInput || !eventName}>
+            <Button
+              variant="ghost"
+              className={`transition-all duration-200 ease-in-out cursor-pointer ${
+                showInput ? "opacity-100" : "opacity-0!"
+              }`}
+            >
+              <CheckCircle className="text-accent" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{eventName} Dates</DialogTitle>
+            </DialogHeader>
+            <div className="flex flex-col gap-4">
+              <DateTimePicker
+                placeholder="Start Date"
+                value={startDate}
+                onChange={setStartDate}
+                required
+              />
+              <DateTimePicker
+                placeholder="End Date"
+                value={endDate}
+                onChange={setEndDate}
+                required
+              />
+              <Button className="w-min ml-auto">
+                Save
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+        <Button
+          variant="ghost"
+          onClick={() => {
+            setShowInput(false);
+            setEventName("");
+            setStartDate(undefined);
+            setEndDate(undefined);
+          }}
+          disabled={!showInput}
+          className={`transition-all duration-200 ease-in-out cursor-pointer ${
+            showInput ? "opacity-100" : "opacity-0!"
+          }`}
+        >
+          <CircleX className="text-accent" />
+        </Button>
+      </div>
     </div>
   );
 }

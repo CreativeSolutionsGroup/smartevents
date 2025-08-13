@@ -37,6 +37,8 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-msft-button-foreground: var(--msft-button-foreground);
+  --color-msft-button: var(--msft-button-background);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -76,6 +78,8 @@
   --sidebar-accent-foreground: oklch(0.145 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.234 0.084 252.8); /* #003a63 in OKLCH */
+  --msft-button-background: oklch(100% 0.00011 271.152);
+  --msft-button-foreground: oklch(48.193% 0.00005 271.152);
 }
 
 .dark {
@@ -110,6 +114,8 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.334 0.104 252.8); /* Lighter #003a63 variant for dark mode */
+  --msft-button-background: oklch(30.519% 0.00003 271.152);
+  --msft-button-foreground: oklch(100% 0.00011 271.152);
 }
 
 @layer base {

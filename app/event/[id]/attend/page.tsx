@@ -1,6 +1,6 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import SignInButton from "@/components/custom/signIn";
+import SignInButton from "@/components/entra-sign-in/sign-in";
 import prisma from "@/lib/prisma";
 
 interface SuccessPageParams {

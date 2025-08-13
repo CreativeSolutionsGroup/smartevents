@@ -1,6 +1,6 @@
 "use client";
 import { signIn } from "next-auth/react";
-import MicrosoftIcon from "./MicrosoftIcon";
+import MicrosoftIcon from "./microsoft-icon";
 
 export default function SignInButton({
   callbackUrl,
