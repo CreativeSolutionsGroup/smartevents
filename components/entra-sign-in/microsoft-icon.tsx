@@ -1,4 +1,4 @@
-export default function MicrosoftIcon({ darkMode }: { darkMode?: boolean }) {
+export default function MicrosoftIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

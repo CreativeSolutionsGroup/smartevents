@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="antialiased flex flex-col min-h-0 overflow-hidden">
+      <body className="antialiased flex flex-col min-h-0 overflow-auto">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

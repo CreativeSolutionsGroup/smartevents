@@ -1,22 +1,22 @@
-import * as React from "react";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 import { Clock } from "lucide-react";
+import TimePicker from "./time-picker";
+import { useEffect, useState } from "react";
 
 interface DateTimePickerProps {
   value?: Date;
   onChange?: (date: Date | undefined) => void;
   className?: string;
   placeholder?: string;
-  required?: boolean; // added
+  required?: boolean;
 }
 
 export function DateTimePicker({
@@ -24,56 +24,30 @@ export function DateTimePicker({
   onChange,
   className,
   placeholder = "Pick a date and time...",
-  required = false, // added
+  required = false,
 }: DateTimePickerProps) {
-  const [open, setOpen] = React.useState(false);
-  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(
-    value
-  );
-  const [time, setTime] = React.useState<string>(
-    value ? format(value, "HH:mm") : ""
-  );
+  const [open, setOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(value);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (value) {
       setSelectedDate(value);
-      setTime(format(value, "HH:mm"));
     }
   }, [value]);
 
-  function handleDateSelect(date: Date | undefined) {
+  function handleUpdate(date: Date | undefined) {
     setSelectedDate(date);
-    if (date && time) {
-      const [hours, minutes] = time.split(":").map(Number);
-      const newDate = new Date(date);
-      newDate.setHours(hours);
-      newDate.setMinutes(minutes);
-      onChange?.(newDate);
-    } else {
-      onChange?.(undefined);
-    }
-  }
-
-  function handleTimeChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const newTime = e.target.value;
-    setTime(newTime);
-    if (selectedDate && newTime) {
-      const [hours, minutes] = newTime.split(":").map(Number);
-      const newDate = new Date(selectedDate);
-      newDate.setHours(hours);
-      newDate.setMinutes(minutes);
-      onChange?.(newDate);
-    }
+    onChange?.(date);
   }
 
   function displayValue() {
-    if (selectedDate && time) {
-      return format(selectedDate, "yyyy-MM-dd") + " " + time;
+    if (selectedDate && !isNaN(selectedDate.getTime())) {
+      return format(selectedDate, "yyyy-MM-dd hh:mm a");
     }
     return "";
   }
 
-  const isInvalid = required && (!selectedDate || !time);
+  const isInvalid = required && !selectedDate;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -102,18 +76,17 @@ export function DateTimePicker({
           <Calendar
             mode="single"
             selected={selectedDate}
-            onSelect={handleDateSelect}
+            onSelect={handleUpdate}
             autoFocus
+            classNames={{
+              today: "bg-muted rounded-md",
+            }}
           />
-          <div className="flex items-center">
-            <Clock className="mr-4" />
-            <Input
-              type="time"
-              value={time}
-              onChange={handleTimeChange}
-              className={cn(
-                isInvalid && "border-destructive focus:ring-destructive"
-              )}
+          <div className="flex items-center mx-auto">
+            <Clock className="mr-3" />
+            <TimePicker
+              value={selectedDate}
+              onChange={handleUpdate}
               required={required}
             />
           </div>

@@ -84,17 +84,17 @@ model Event {
 }
 
 model Attendance {
-  id      Int            @id @default(autoincrement())
-  user    AuthorizedUser @relation(fields: [userId], references: [id])
-  userId  String
-  event   Event          @relation(fields: [eventId], references: [id])
-  eventId String
+  id        Int            @id @default(autoincrement())
+  user      AuthorizedUser @relation(fields: [userId], references: [id])
+  userId    String
+  event     Event          @relation(fields: [eventId], references: [id])
+  eventId   String
+  timestamp DateTime?      @default(now())
 
   @@unique([userId, eventId])
 }
 
 enum Roles {
   VIEWER
-  EDITOR
   ADMIN
 }

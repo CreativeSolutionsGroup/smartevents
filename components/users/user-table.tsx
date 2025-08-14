@@ -1,10 +1,10 @@
 "use client";
 
 import { UserWithAuthorizedUser } from "@/types/user";
-import { Roles } from "@prisma/client";
 import { useMemo, useState } from "react";
+import { RolePicker } from "./role-picker";
 
-export default function UserSearch({
+export default function UserTable({
   users,
 }: {
   users: UserWithAuthorizedUser[];
@@ -26,7 +26,7 @@ export default function UserSearch({
 
   return (
     <div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between gap-2">
         <h2 className="text-lg">Users</h2>
         <input
           type="text"
@@ -50,7 +50,7 @@ export default function UserSearch({
               <td className="font-semibold py-2">{user.name}</td>
               <td className="py-2">{user.email}</td>
               <td className="py-2 text-xs text-muted-foreground/50">
-                {user.authorizedUser?.role || Roles.VIEWER}
+                <RolePicker user={user} />
               </td>
             </tr>
           ))}

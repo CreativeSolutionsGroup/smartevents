@@ -1,11 +1,9 @@
 "use client";
 
 import { CheckCircle, CircleX, Plus } from "lucide-react";
-import { Button } from "../ui/button";
 import { useState } from "react";
-import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import { DateTimePicker } from "../ui/datetime-picker";
-import { createEvent } from "@/lib/server/event";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import { Input } from "../ui/input";
 
 export default function AddEvent() {
   const [showInput, setShowInput] = useState(false);
