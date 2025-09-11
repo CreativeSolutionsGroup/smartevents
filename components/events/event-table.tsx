@@ -2,7 +2,7 @@
 
 import { deleteEvent, updateEvent } from "@/lib/server/event";
 import { Event } from "@prisma/client";
-import { ChartColumnIncreasing, QrCodeIcon, Trash2 } from "lucide-react";
+import { ChartColumnIncreasing, Trash2 } from "lucide-react";
 import { redirect, RedirectType } from "next/navigation";
 import { Button } from "../ui/button";
 import { DateTimePicker } from "../ui/datetime-picker";
