@@ -1,6 +1,6 @@
 "use client";
 
-import { QrCode } from "lucide-react";
+import { QrCode, Check } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -9,19 +9,26 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { QRCodeCanvas } from "qrcode.react";
+import { useState } from "react";
 
 export default function EventQRCode({ eventId }: { eventId: string }) {
+  const [isUrlCopied, setIsUrlCopied] = useState(false);
   const currentDomain =
     typeof window !== "undefined"
       ? window.location.origin
       : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
+  const copyUrl = (url: string) => {
+    navigator.clipboard.writeText(url);
+    setIsUrlCopied(true);
+  }
+
   return (
-    <Dialog>
+    <Dialog onOpenChange={() => setIsUrlCopied(false)}>
       <DialogTrigger asChild>
         <Button
           variant="ghost"
-          className="ml-auto cursor-pointer text-muted-foreground hover:text-accent"
+          className="cursor-pointer text-muted-foreground hover:text-accent"
         >
           <QrCode />
         </Button>
@@ -40,7 +47,18 @@ export default function EventQRCode({ eventId }: { eventId: string }) {
           </code>
           <br />
           to download the QR code.
+          <br />
         </p>
+        <div className="flex justify-center">
+          <p className="border-y border-white w-fit px-3">OR</p>
+        </div>
+        <Button onClick={() => copyUrl(`${currentDomain}/event/${eventId}/attend`)}>
+          {isUrlCopied ? 
+          <>URL Copied! <Check /></>
+          :
+          <>Copy the URL</>
+          }
+        </Button>
       </DialogContent>
     </Dialog>
   );

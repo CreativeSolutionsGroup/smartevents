@@ -37,7 +37,15 @@ export default async function StatsPage({ params }: SuccessPageParams) {
       user: true,
       event: true,
     },
+    orderBy: {
+      timestamp: 'asc',
+    }
   });
+  const event = await prisma.event.findFirst({
+    where: {
+      id: eventId,
+    }
+  })
 
   // Compute attendance per hour
   const attendancePerHour: { hour: string; attendees: number }[] = [];
@@ -74,7 +82,7 @@ export default async function StatsPage({ params }: SuccessPageParams) {
       <h1 className="text-3xl font-bold mb-6">
         Event Statistics
         <span className="block text-lg font-medium text-muted-foreground mt-1">
-          {attendees[0]?.event.name ?? notFound()}
+          {event?.name ?? notFound()}
         </span>
       </h1>
       <div className="mb-8 space-y-2">
@@ -85,15 +93,15 @@ export default async function StatsPage({ params }: SuccessPageParams) {
         <div className="flex items-center gap-4">
           <span className="font-semibold">Event Date:</span>
           <span>
-            {attendees[0]?.event.startTime.toLocaleDateString() ?? "N/A"}
+            {event?.startTime.toLocaleDateString() ?? "N/A"}
           </span>
         </div>
         <div className="flex items-center gap-4">
           <span className="font-semibold">Event Time:</span>
           <span>
-            {(attendees[0]?.event.startTime.toLocaleTimeString() ?? "N/A") +
+            {(event?.startTime.toLocaleTimeString() ?? "N/A") +
               " to " +
-              (attendees[0]?.event.endTime.toLocaleTimeString() ?? "N/A")}
+              (event?.endTime.toLocaleTimeString() ?? "N/A")}
           </span>
         </div>
       </div>
@@ -107,7 +115,7 @@ export default async function StatsPage({ params }: SuccessPageParams) {
       </div>
       <h3 className="text-lg font-semibold mb-2">Attendee List</h3>
       <div className="overflow-x-auto">
-        <table className="min-w-[400px] w-full bg-card border border-border rounded-lg shadow">
+        <table className="min-w-[400px] w-full bg-card border border-border rounded-lg shadow mb-5">
           <thead>
             <tr className="bg-muted">
               <th className="py-3 px-4 border-b border-border text-left">
