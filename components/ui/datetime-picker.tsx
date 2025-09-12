@@ -50,12 +50,12 @@ export function DateTimePicker({
   const isInvalid = required && !selectedDate;
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={setOpen} modal={true}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           className={cn(
-            "justify-start text-left font-normal cursor-pointer",
+            "justify-start text-left font-normal",
             !selectedDate && "text-muted-foreground",
             isInvalid && "border-destructive focus:ring-destructive",
             className

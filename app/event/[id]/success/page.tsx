@@ -2,6 +2,8 @@ import { notFound, redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import Confetti from "@/components/confetti/confetti";
 import { auth } from "@/auth";
+import Image from "next/image";
+import Stinger from "@/images/stinger.png";
 
 interface SuccessPageParams {
   params: Promise<{
@@ -77,7 +79,7 @@ export default async function EventSuccessPage({ params }: SuccessPageParams) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-black px-4">
+    <div className="h-[calc(100vh-64px)] flex flex-col items-center justify-center bg-white dark:bg-black px-4">
       {!attendance &&
       event?.startTime &&
       new Date(event.startTime) <= new Date() &&
@@ -85,6 +87,7 @@ export default async function EventSuccessPage({ params }: SuccessPageParams) {
       new Date(event.endTime) > new Date() ? (
         <Confetti />
       ) : null}
+      <Image className="m-10" width={250} src={Stinger} alt="Stinger image" />
       {message}
     </div>
   );
