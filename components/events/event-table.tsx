@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import { DateTimePicker } from "../ui/datetime-picker";
 import EventNameEditor from "./name-edit";
 import { useMemo, useState } from "react";
+import EventQRCode from "./qr-code";
 
 export default function EventTable({ events }: { events: Event[] }) {
   const [query, setQuery] = useState("");
@@ -80,6 +81,7 @@ export default function EventTable({ events }: { events: Event[] }) {
                   >
                     <Trash2 />
                   </Button>
+                  <EventQRCode eventId={event.id} />
                   <Button
                     variant="ghost"
                     className="cursor-pointer"

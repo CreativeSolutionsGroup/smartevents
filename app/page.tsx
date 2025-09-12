@@ -24,6 +24,9 @@ export default async function Home() {
       event: true,
       user: true,
     },
+    orderBy: {
+      timestamp: 'desc',
+    }
   });
 
   return (

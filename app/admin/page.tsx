@@ -19,7 +19,9 @@ export default async function AdminPage() {
     redirect("/");
   }
 
-  const events = await prisma.event.findMany({});
+  const events = await prisma.event.findMany({
+    orderBy: { startTime: 'desc' }
+  });
   const users = await prisma.user.findMany({
     include: { authorizedUser: true },
   });
