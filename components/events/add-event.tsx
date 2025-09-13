@@ -22,7 +22,7 @@ export default function AddEvent() {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
-    <div className="flex gap-2 items-center mt-4">
+    <div className="flex gap-2 items-center mt-2">
       <Button
         variant="ghost"
         className="cursor-pointer"

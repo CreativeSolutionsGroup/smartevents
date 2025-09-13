@@ -35,11 +35,6 @@ export function DateTimePicker({
     }
   }, [value]);
 
-  function handleUpdate(date: Date | undefined) {
-    setSelectedDate(date);
-    onChange?.(date);
-  }
-
   function displayValue() {
     if (selectedDate && !isNaN(selectedDate.getTime())) {
       return format(selectedDate, "yyyy-MM-dd hh:mm a");
@@ -50,7 +45,20 @@ export function DateTimePicker({
   const isInvalid = required && !selectedDate;
 
   return (
-    <Popover open={open} onOpenChange={setOpen} modal={true}>
+    <Popover
+      open={open}
+      onOpenChange={(open) => {
+        if (!open && required && !selectedDate) {
+          return;
+        }
+
+        setOpen(open);
+        if (!open) {
+          onChange?.(selectedDate);
+        }
+      }}
+      modal={true}
+    >
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -76,7 +84,7 @@ export function DateTimePicker({
           <Calendar
             mode="single"
             selected={selectedDate}
-            onSelect={handleUpdate}
+            onSelect={setSelectedDate}
             autoFocus
             classNames={{
               today: "bg-muted rounded-md",
@@ -86,7 +94,7 @@ export function DateTimePicker({
             <Clock className="mr-3" />
             <TimePicker
               value={selectedDate}
-              onChange={handleUpdate}
+              onChange={setSelectedDate}
               required={required}
             />
           </div>

@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { Input } from "./input";
 
 interface DateTimePickerProps {
   value?: Date;
@@ -18,42 +19,47 @@ export default function TimePicker({
   placeholder = "Pick a time...",
   required = false,
 }: DateTimePickerProps) {
+  // Initialize state in 12-hour format and track AM/PM explicitly
   const [currentHour, setCurrentHour] = useState<number | undefined>(
-    value?.getHours()
+    value ? value.getHours() % 12 || 12 : undefined
   );
   const [currentMinute, setCurrentMinute] = useState<number | undefined>(
     value?.getMinutes()
   );
+  const [period, setPeriod] = useState<"AM" | "PM">(
+    value && value.getHours() >= 12 ? "PM" : "AM"
+  );
+
+  const to24 = (h12: number, p: "AM" | "PM") => {
+    const h = h12 % 12;
+    return p === "PM" ? h + 12 : h;
+  };
 
   useEffect(() => {
-    if (currentHour !== undefined && currentMinute !== undefined) {
-      const newDate = new Date(value || Date.now());
-      if (value?.getHours() ?? 0 > 12) {
-        newDate.setHours(currentHour + 12);
-      } else {
-        newDate.setHours(currentHour);
-      }
-      newDate.setMinutes(currentMinute);
-      onChange?.(newDate);
+    if (value && !isNaN(value.getTime())) {
+      setCurrentHour(value.getHours() % 12 || 12);
+      setCurrentMinute(value.getMinutes());
+      setPeriod(value.getHours() >= 12 ? "PM" : "AM");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentHour, currentMinute]);
+  }, [value]);
 
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <input
+        <Input
           type="time"
           value={value && !isNaN(value.getTime()) ? format(value, "HH:mm") : ""}
           onChange={(e) => {
             const [hours, minutes] = e.target.value.split(":").map(Number);
-            if (hours === undefined || minutes === undefined) {
-              return;
-            }
-            const newDate = new Date();
+            if (isNaN(hours) || isNaN(minutes)) return;
+            const newDate = new Date(value || Date.now());
             newDate.setHours(hours);
             newDate.setMinutes(minutes);
             onChange?.(newDate);
+            
+            setPeriod(hours >= 12 ? "PM" : "AM");
+            setCurrentHour(hours % 12 || 12);
+            setCurrentMinute(minutes);
           }}
           placeholder={placeholder}
           required={required}
@@ -75,7 +81,14 @@ export default function TimePicker({
                     "bg-primary": currentHour === hour + 1,
                   }
                 )}
-                onClick={() => setCurrentHour(hour + 1)}
+                onClick={() => {
+                  const h12 = hour + 1;
+                  setCurrentHour(h12);
+                  const base = new Date(value || Date.now());
+                  base.setHours(to24(h12, period));
+                  base.setMinutes(currentMinute ?? base.getMinutes());
+                  onChange?.(base);
+                }}
               >
                 {(hour + 1).toString().padStart(2, "0")}
               </p>
@@ -94,7 +107,15 @@ export default function TimePicker({
                     "bg-primary": currentMinute === minute,
                   }
                 )}
-                onClick={() => setCurrentMinute(minute)}
+                onClick={() => {
+                  setCurrentMinute(minute);
+                  const base = new Date(value || Date.now());
+                  const h12 = currentHour ?? (base.getHours() % 12 || 12);
+                  const per = period ?? (base.getHours() >= 12 ? "PM" : "AM");
+                  base.setHours(to24(h12, per));
+                  base.setMinutes(minute);
+                  onChange?.(base);
+                }}
               >
                 {minute.toString().padStart(2, "0")}
               </p>
@@ -104,34 +125,25 @@ export default function TimePicker({
             <p className="sticky top-0 bg-popover w-full text-center pb-1">
               AM/PM
             </p>
-            {["AM", "PM"].map((period) => (
+            {["AM", "PM"].map((p) => (
               <p
-                key={period}
+                key={p}
                 className={cn(
                   "text-center w-10 py-1 rounded-md hover:bg-primary/50 cursor-pointer",
                   {
-                    "bg-primary":
-                      value &&
-                      ((period === "AM" && value.getHours() < 12) ||
-                        (period === "PM" && value.getHours() >= 12)),
+                    "bg-primary": period === p,
                   }
                 )}
                 onClick={() => {
-                  if (!value) return;
-                  const hours = value.getHours();
-                  let newHours = hours;
-                  if (period === "AM" && hours >= 12) {
-                    newHours = hours - 12;
-                  } else if (period === "PM" && hours < 12) {
-                    newHours = hours + 12;
-                  }
-                  const newDate = new Date(value);
-                  newDate.setHours(newHours);
-                  onChange?.(newDate);
-                  setCurrentHour(newHours % 12 === 0 ? 12 : newHours % 12);
+                  setPeriod(p as "AM" | "PM");
+                  const base = new Date(value || Date.now());
+                  const h12 = currentHour ?? (base.getHours() % 12 || 12);
+                  base.setHours(to24(h12, p as "AM" | "PM"));
+                  base.setMinutes(currentMinute ?? base.getMinutes());
+                  onChange?.(base);
                 }}
               >
-                {period}
+                {p}
               </p>
             ))}
           </div>
