@@ -1,7 +1,7 @@
-import React from "react";
-import { notFound } from "next/navigation";
-import SignInButton from "@/components/entra-sign-in/sign-in";
+import EmailSignIn from "@/components/sign-in/email-sign-in";
+import SignInButton from "@/components/sign-in/sign-in";
 import prisma from "@/lib/prisma";
+import { notFound } from "next/navigation";
 
 interface SuccessPageParams {
   params: Promise<{
@@ -19,7 +19,7 @@ export default async function EventsLanding({ params }: SuccessPageParams) {
   });
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-black px-4">
+    <div className="h-[calc(100vh-64px)] flex flex-col items-center justify-center bg-white dark:bg-black px-4">
       <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-center">
         Welcome to {event?.name || notFound()}!
       </h1>
@@ -27,6 +27,7 @@ export default async function EventsLanding({ params }: SuccessPageParams) {
         Sign in to record your attendance
       </p>
       <SignInButton callbackUrl={"/event/" + eventId + "/success"} />
+      <EmailSignIn callbackUrl={"/event/" + eventId + "/success"} />
     </div>
   );
 }

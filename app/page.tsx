@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
-import SignInButton from "@/components/entra-sign-in/sign-in";
+import EmailSignIn from "@/components/sign-in/email-sign-in";
+import SignInButton from "@/components/sign-in/sign-in";
 import prisma from "@/lib/prisma";
 
 export default async function Home() {
@@ -8,8 +9,10 @@ export default async function Home() {
 
   if (!user) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex flex-col justify-center items-center mt-20">
         <SignInButton callbackUrl="/" />
+        <span className="mt-2">or</span>
+        <EmailSignIn callbackUrl="/" />
       </div>
     );
   }
@@ -25,8 +28,8 @@ export default async function Home() {
       user: true,
     },
     orderBy: {
-      timestamp: 'desc',
-    }
+      timestamp: "desc",
+    },
   });
 
   return (
@@ -39,20 +42,24 @@ export default async function Home() {
               key={att.id}
               className="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 hover:bg-muted"
             >
-              <h2 className="text-xl font-semibold color-foreground">{att.event.name}</h2>
+              <h2 className="text-xl font-semibold color-foreground">
+                {att.event.name}
+              </h2>
               <p className="text-muted-foreground">
-          On{" "}
-          {new Date(att.event.startTime).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
+                On{" "}
+                {new Date(att.event.startTime).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
               </p>
             </div>
           ))
         ) : (
           <div className="p-8 border rounded-lg shadow-sm text-center bg-muted">
-            <h2 className="text-xl font-semibold text-muted-foreground">No Events Attended</h2>
+            <h2 className="text-xl font-semibold text-muted-foreground">
+              No Events Attended
+            </h2>
             <p className="text-muted-foreground mt-2">
               You haven&apos;t attended any events yet. Check back later!
             </p>

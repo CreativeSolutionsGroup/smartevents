@@ -9,6 +9,7 @@ import {
 } from "../ui/dropdown-menu";
 import Link from "next/link";
 import { auth } from "@/auth";
+import Stinger from "@/images/stinger.png";
 
 export default async function UserAvatar() {
   const session = await auth();
@@ -21,7 +22,7 @@ export default async function UserAvatar() {
           <Avatar>
             <AvatarImage
               className="bg-muted-foreground"
-              src={user?.image ?? ""}
+              src={user?.image ?? Stinger.src}
               alt="User Avatar"
             />
             <AvatarFallback>

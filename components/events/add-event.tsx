@@ -12,12 +12,14 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { Input } from "../ui/input";
+import { createEvent } from "@/lib/server/event";
 
 export default function AddEvent() {
   const [showInput, setShowInput] = useState(false);
   const [eventName, setEventName] = useState("");
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
     <div className="flex gap-2 items-center mt-4">
@@ -46,8 +48,12 @@ export default function AddEvent() {
               setStartDate(undefined);
               setEndDate(undefined);
               setShowInput(false);
+              setDialogOpen(false);
+            } else {
+              setDialogOpen(true);
             }
           }}
+          open={dialogOpen}
         >
           <DialogTrigger asChild disabled={!showInput || !eventName}>
             <Button
@@ -76,7 +82,20 @@ export default function AddEvent() {
                 onChange={setEndDate}
                 required
               />
-              <Button className="w-min ml-auto">
+              <Button
+                className="w-min ml-auto"
+                onClick={async () => {
+                  if (startDate && endDate) {
+                    await createEvent(eventName, startDate, endDate);
+                  }
+
+                  setShowInput(false);
+                  setEventName("");
+                  setStartDate(undefined);
+                  setEndDate(undefined);
+                  setDialogOpen(false);
+                }}
+              >
                 Save
               </Button>
             </div>

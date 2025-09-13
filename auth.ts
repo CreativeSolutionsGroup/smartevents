@@ -6,7 +6,9 @@ import authConfig from "./auth.config";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
+  ...authConfig,
   callbacks: {
+    ...authConfig.callbacks,
     signIn: async (token) => {
       if (token.user.email && token.user.email.endsWith("@cedarville.edu")) {
         const userInfo = await prisma.user.findUnique({
@@ -29,5 +31,4 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return false;
     },
   },
-  ...authConfig,
 });
