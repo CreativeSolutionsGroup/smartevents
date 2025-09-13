@@ -18,7 +18,7 @@ export default function EventNameEditor({
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       updateEvent(event.id, { name: value });
-    }, 500);
+    }, 1000);
   };
 
   return (

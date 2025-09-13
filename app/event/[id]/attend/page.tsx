@@ -1,7 +1,8 @@
+import { auth } from "@/auth";
 import EmailSignIn from "@/components/sign-in/email-sign-in";
 import SignInButton from "@/components/sign-in/sign-in";
 import prisma from "@/lib/prisma";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 interface SuccessPageParams {
   params: Promise<{
@@ -10,6 +11,11 @@ interface SuccessPageParams {
 }
 
 export default async function EventsLanding({ params }: SuccessPageParams) {
+  const session = await auth();
+  if (session?.user) {
+    redirect(`/event/${(await params).id}/success`);
+  }
+
   const eventId = (await params).id;
 
   const event = await prisma.event.findUnique({

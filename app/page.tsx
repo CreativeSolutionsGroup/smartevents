@@ -1,5 +1,4 @@
 import { auth } from "@/auth";
-import EmailSignIn from "@/components/sign-in/email-sign-in";
 import SignInButton from "@/components/sign-in/sign-in";
 import prisma from "@/lib/prisma";
 
@@ -7,12 +6,15 @@ export default async function Home() {
   const session = await auth();
   const user = session?.user;
 
-  if (!user) {
+  if (!user || session.provider !== "microsoft-entra-id") {
     return (
       <div className="flex flex-col justify-center items-center mt-20">
+        <span className="text-2xl mb-4">Welcome to Smart Events!</span>
+        <p className="mb-4 text-center max-w-md">
+          Please sign in with your Cedarville University account to view the
+          events you&apos;ve attended.
+        </p>
         <SignInButton callbackUrl="/" />
-        <span className="mt-2">or</span>
-        <EmailSignIn callbackUrl="/" />
       </div>
     );
   }

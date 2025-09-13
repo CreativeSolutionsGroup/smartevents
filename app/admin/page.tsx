@@ -27,13 +27,13 @@ export default async function AdminPage() {
   });
 
   return (
-    <div className="py-2 px-4 flex flex-col">
+    <div className="py-2 px-4 flex flex-col h-full">
       <h1 className="text-2xl">Admin Dashboard</h1>
-      <div className="border-border border-2 rounded-md p-2 mt-2 min-w-[350px] max-w-[800px] max-[800px]:max-w-full bg-muted">
+      <div className="border-border border-2 rounded-md p-2 mt-2 min-w-[350px] max-w-[800px] max-[800px]:max-w-full bg-muted flex-1">
         <EventTable events={events} />
         <AddEvent />
       </div>
-      <div className="border-border border-2 rounded-md p-2 mt-2 min-w-[350px] max-w-[800px] max-[800px]:max-w-full bg-muted">
+      <div className="border-border border-2 rounded-md p-2 mt-2 min-w-[350px] max-w-[800px] max-[800px]:max-w-full bg-muted flex-1">
         <UserTable users={users} />
       </div>
     </div>

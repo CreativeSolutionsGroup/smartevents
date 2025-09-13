@@ -10,6 +10,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     ...authConfig.callbacks,
     signIn: async (token) => {
+      if (token.account?.provider === "credentials") {
+        if (token.user.email && token.user.email.endsWith("@cedarville.edu")) {
+          await prisma.authorizedUser.upsert({
+            where: { email: token.user.email },
+            update: {},
+            create: {
+              email: token.user.email,
+            },
+          });
+          return true;
+        }
+        return false;
+      }
+
       if (token.user.email && token.user.email.endsWith("@cedarville.edu")) {
         const userInfo = await prisma.user.findUnique({
           where: { email: token.user.email },

@@ -24,11 +24,20 @@ export default async function EventSuccessPage({ params }: SuccessPageParams) {
       id: eventId,
     },
   });
-  const user = await prisma.authorizedUser.findUnique({
-    where: {
-      email: session?.user?.email || undefined,
-    },
-  });
+
+  // Get or create an authorized user record for the authenticated user
+  const user =
+    (await prisma.authorizedUser.findUnique({
+      where: {
+        email: session?.user?.email || undefined,
+      },
+    })) ??
+    (await prisma.authorizedUser.create({
+      data: {
+        email: session?.user?.email || "",
+      },
+    }));
+
   const attendance = await prisma.attendance.findFirst({
     where: {
       eventId: eventId,
@@ -45,8 +54,15 @@ export default async function EventSuccessPage({ params }: SuccessPageParams) {
       event?.endTime &&
       new Date(event.endTime) > new Date()
     ) {
-      await prisma.attendance.create({
-        data: {
+      await prisma.attendance.upsert({
+        where: {
+          userId_eventId: {
+            eventId: eventId,
+            userId: user.id,
+          },
+        },
+        update: {},
+        create: {
           eventId: eventId,
           userId: user.id,
         },

@@ -15,12 +15,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="antialiased flex flex-col min-h-0 overflow-auto">
+      <body className="antialiased flex flex-col min-h-0 overflow-auto h-screen">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
-          disableTransitionOnChange
         >
           <AppBar />
           {children}
