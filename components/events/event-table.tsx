@@ -4,7 +4,7 @@ import { deleteEvent, updateEvent } from "@/lib/server/event";
 import { Event } from "@prisma/client";
 import {
   ChartColumnIncreasing,
-  Dice5,
+  Dices,
   Search,
   Trash2
 } from "lucide-react";
@@ -102,7 +102,7 @@ export default function EventTable({ events }: { events: Event[] }) {
                       redirect(`/admin/events/${event.id}`, RedirectType.push)
                     }
                   >
-                    <Dice5 />
+                    <Dices />
                   </Button>
                 </div>
               </td>
