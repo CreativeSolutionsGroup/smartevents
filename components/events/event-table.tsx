@@ -2,12 +2,7 @@
 
 import { deleteEvent, updateEvent } from "@/lib/server/event";
 import { Event } from "@prisma/client";
-import {
-  ChartColumnIncreasing,
-  Dices,
-  Search,
-  Trash2
-} from "lucide-react";
+import { Dices, Search, Trash2 } from "lucide-react";
 import { redirect, RedirectType } from "next/navigation";
 import { useMemo, useState } from "react";
 import { Button } from "../ui/button";
@@ -86,15 +81,6 @@ export default function EventTable({ events }: { events: Event[] }) {
                     <Trash2 />
                   </Button>
                   <EventQRCode eventId={event.id} />
-                  <Button
-                    variant="ghost"
-                    className="cursor-pointer"
-                    onClick={() =>
-                      redirect(`/admin/stats/${event.id}`, RedirectType.push)
-                    }
-                  >
-                    <ChartColumnIncreasing />
-                  </Button>
                   <Button
                     variant="ghost"
                     className="cursor-pointer"
