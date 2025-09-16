@@ -1,23 +1,16 @@
-import { auth } from "@/auth";
-import Confetti from "@/components/confetti/confetti";
-import Stinger from "@/images/stinger.png";
 import prisma from "@/lib/prisma";
 import Image from "next/image";
+import Stinger from "@/images/stinger.png";
 import { redirect } from "next/navigation";
 
-interface SuccessPageParams {
+export default async function TooEarlyPage({
+  params,
+}: {
   params: Promise<{
     id: string;
   }>;
-}
-
-export default async function EventSuccessPage({ params }: SuccessPageParams) {
+}) {
   const eventId = (await params).id;
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect(`/event/${eventId}/attend`);
-  }
 
   const event = await prisma.event.findUnique({
     where: {
@@ -31,7 +24,6 @@ export default async function EventSuccessPage({ params }: SuccessPageParams) {
 
   return (
     <div className="h-full flex flex-col justify-center items-center p-4">
-      <Confetti />
       <Image
         className="mb-4"
         src={Stinger}
@@ -39,10 +31,10 @@ export default async function EventSuccessPage({ params }: SuccessPageParams) {
         width={250}
         height={250}
       />
-      <h1 className="text-3xl font-bold mb-4">Got It!</h1>
+      <h1 className="text-3xl font-bold mb-4">Just Missed It!</h1>
       <p className="text-lg text-center max-w-md">
-        Your attendance for <strong>{event?.name}</strong> has been successfully
-        recorded!
+        Attendance for <strong>{event?.name}</strong> cannot be recorded
+        anymore. We&apos;re sorry you missed it!
       </p>
     </div>
   );

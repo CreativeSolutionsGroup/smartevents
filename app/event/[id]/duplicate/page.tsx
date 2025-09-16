@@ -1,5 +1,4 @@
 import { auth } from "@/auth";
-import Confetti from "@/components/confetti/confetti";
 import Stinger from "@/images/stinger.png";
 import prisma from "@/lib/prisma";
 import Image from "next/image";
@@ -11,7 +10,9 @@ interface SuccessPageParams {
   }>;
 }
 
-export default async function EventSuccessPage({ params }: SuccessPageParams) {
+export default async function DuplicateAttendancePage({
+  params,
+}: SuccessPageParams) {
   const eventId = (await params).id;
   const session = await auth();
 
@@ -31,7 +32,6 @@ export default async function EventSuccessPage({ params }: SuccessPageParams) {
 
   return (
     <div className="h-full flex flex-col justify-center items-center p-4">
-      <Confetti />
       <Image
         className="mb-4"
         src={Stinger}
@@ -39,10 +39,11 @@ export default async function EventSuccessPage({ params }: SuccessPageParams) {
         width={250}
         height={250}
       />
-      <h1 className="text-3xl font-bold mb-4">Got It!</h1>
+      <h1 className="text-3xl font-bold mb-4">Twins?</h1>
       <p className="text-lg text-center max-w-md">
-        Your attendance for <strong>{event?.name}</strong> has been successfully
-        recorded!
+        It looks like your attendance for <strong>{event?.name}</strong> has
+        already been recorded. Unless you have a secret twin, you can rest
+        assured that we&apos;ve got you marked present!
       </p>
     </div>
   );
