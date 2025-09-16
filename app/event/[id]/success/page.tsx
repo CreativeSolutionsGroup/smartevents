@@ -25,18 +25,11 @@ export default async function EventSuccessPage({ params }: SuccessPageParams) {
     },
   });
 
-  // Get or create an authorized user record for the authenticated user
-  const user =
-    (await prisma.authorizedUser.findUnique({
-      where: {
-        email: session?.user?.email || undefined,
-      },
-    })) ??
-    (await prisma.authorizedUser.create({
-      data: {
-        email: session?.user?.email || "",
-      },
-    }));
+  const user = await prisma.authorizedUser.findUnique({
+    where: {
+      email: session?.user?.email || undefined,
+    },
+  });
 
   const attendance = await prisma.attendance.findFirst({
     where: {

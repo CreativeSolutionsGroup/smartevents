@@ -1,26 +1,27 @@
-import { auth } from "@/auth";
 import AddEvent from "@/components/events/add-event";
 import EventTable from "@/components/events/event-table";
 import UserTable from "@/components/users/user-table";
 import prisma from "@/lib/prisma";
-import { redirect } from "next/navigation";
 
 export default async function AdminPage() {
-  const session = await auth();
-  if (!session) {
-    redirect("/");
-  }
-  const user = await prisma.authorizedUser.findUnique({
-    where: {
-      email: session?.user?.email || undefined,
-    },
-  });
-  if (!user || user.role !== "ADMIN") {
-    redirect("/");
-  }
-
   const events = await prisma.event.findMany({
-    orderBy: { startTime: 'desc' }
+    orderBy: { startTime: "desc" },
+  });
+  const usersWithoutRole = await prisma.user.findMany({
+    where: { authorizedUser: null },
+  });
+  await prisma.$transaction(async (prisma) => {
+    await Promise.all(
+      usersWithoutRole.map(async (user) => {
+        await prisma.authorizedUser.create({
+          data: {
+            userId: user.id,
+            email: user.email || "",
+            role: "VIEWER",
+          },
+        });
+      })
+    );
   });
   const users = await prisma.user.findMany({
     include: { authorizedUser: true },

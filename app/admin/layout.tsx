@@ -1,4 +1,5 @@
 import { userIsAdmin } from "@/lib/user-info";
+import { redirect } from "next/navigation";
 
 export default async function AdminLayout({
   children,
@@ -6,7 +7,7 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }>) {
   if (!(await userIsAdmin())) {
-    return <div className="p-4">Unauthorized</div>;
+    redirect("/");
   }
 
   return <>{children}</>;
