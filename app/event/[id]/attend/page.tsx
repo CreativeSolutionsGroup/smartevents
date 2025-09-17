@@ -2,7 +2,6 @@ import { auth } from "@/auth";
 import EmailSignIn from "@/components/sign-in/email-sign-in";
 import SignInButton from "@/components/sign-in/sign-in";
 import prisma from "@/lib/prisma";
-import { attendEvent } from "@/lib/server/event";
 import { notFound, redirect } from "next/navigation";
 
 interface SuccessPageParams {
@@ -13,11 +12,12 @@ interface SuccessPageParams {
 
 export default async function EventsLanding({ params }: SuccessPageParams) {
   const session = await auth();
-  if (session?.user && session.user.email) {
-    await attendEvent((await params).id, session.user.email);
-  }
 
   const eventId = (await params).id;
+
+  if (session?.user?.email) {
+    redirect(`/event/${eventId}/loading`);
+  }
 
   const event = await prisma.event.findUnique({
     where: {
@@ -37,8 +37,8 @@ export default async function EventsLanding({ params }: SuccessPageParams) {
       <p className="text-lg mb-8 text-center">
         Sign in to record your attendance
       </p>
-      <SignInButton callbackUrl={`/event/${eventId}/attend`} />
-      <EmailSignIn callbackUrl={`/event/${eventId}/attend`} />
+      <SignInButton callbackUrl={`/event/${eventId}/loading`} />
+      <EmailSignIn callbackUrl={`/event/${eventId}/loading`} />
     </div>
   );
 }

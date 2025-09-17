@@ -22,6 +22,8 @@ export default function CopyBox({ value }: { value: string }) {
         type="text"
         value={value}
         readOnly
+        autoFocus
+        onFocus={(e) => e.target.select()}
         className="rounded-r-none bg-gray-50 font-mono text-sm"
       />
       <Button

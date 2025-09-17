@@ -25,7 +25,7 @@ export async function attendEvent(eventId: string, userEmail: string) {
 
   if (!user) {
     console.log("User not found, redirecting to sign-in");
-    redirect("/event/sign-in");
+    redirect(`/event/${eventId}/attend`);
   }
 
   const userId = user.id;

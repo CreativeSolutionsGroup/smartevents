@@ -13,10 +13,14 @@ export default async function AdminPage() {
   await prisma.$transaction(async (prisma) => {
     await Promise.all(
       usersWithoutRole.map(async (user) => {
-        await prisma.authorizedUser.create({
-          data: {
+        await prisma.authorizedUser.upsert({
+          where: { email: user.email },
+          update: {
             userId: user.id,
-            email: user.email || "",
+          },
+          create: {
+            userId: user.id,
+            email: user.email,
             role: "VIEWER",
           },
         });
