@@ -30,12 +30,14 @@ export default async function EventDetailsPage({ params }: EventPageParams) {
         <h2 className="text-lg font-semibold">Pick Winners</h2>
         <EventWinnerPicker attendees={attendees} />
       </div>
+      <h2 className="text-lg font-semibold mt-4">Attendees</h2>
       <div className="flex flex-wrap gap-2 mt-4">
         {attendees.map((attendee) => (
           <div key={attendee.id} className="py-2 px-4 bg-muted rounded-full">
             {attendee.user.email}
           </div>
         ))}
+        {attendees.length === 0 && <p>No attendees yet.</p>}
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { emailSignIn } from "@/lib/server/sign-in";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
-export default function EmailSignIn({ callbackUrl }: { callbackUrl: string }) {
+export default function EmailSignIn({ callbackUrl }: { callbackUrl?: string }) {
   return (
     <form
       className="flex items-center mt-4"

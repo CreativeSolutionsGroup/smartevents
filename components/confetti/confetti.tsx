@@ -19,8 +19,9 @@ export default function ConfettiComponent() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  return <Confetti 
-  width={width} 
-  height={height}
- />;
+  return (
+    <div className="pointer-events-none fixed inset-0 z-50">
+      <Confetti width={width} height={height} />
+    </div>
+  );
 }
