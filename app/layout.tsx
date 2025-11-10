@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import AppBar from "@/components/appbar/appbar";
 import ThemeProvider from "@/components/theme-provider";
+import FeedbackButton from "@/components/feedback/feedback-button";
+
 
 export const metadata: Metadata = {
   title: "Cedarville University SmartEvents",
@@ -21,6 +23,7 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
         >
+          <FeedbackButton />
           <AppBar />
           {children}
         </ThemeProvider>
